@@ -1,0 +1,565 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Calculateur nutritionnel</title>
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="libs/bootstrap-icons/bootstrap-icons.css" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <div class="container-fluid mt-4">
+      <div class="row justify-content-center">
+        <div class="col-12 px-3 px-xxl-5">
+          <a
+            id="pageTopAnchor"
+            tabindex="-1"
+            style="height: 0; overflow: hidden; width: 0"
+          ></a>
+          <div class="d-flex justify-content-between align-items-center">
+            <h1 class="mb-2">Calculateur nutritionnel</h1>
+            <h1 class="mb-2">
+              <button
+                type="button"
+                id="toggleFontBtn"
+                class="btn btn-sm btn-outline-info"
+              >
+                <i class="bi bi-book me-2"></i><span id="fontBtnLabel"></span>
+              </button>
+            </h1>
+          </div>
+          <form id="nutritionForm" class="row g-3">
+            <fieldset class="border p-3 rounded mb-3">
+              <legend class="w-auto">Informations personnelles</legend>
+              <div class="row g-3">
+                <div class="col-12 col-md-6 col-xxl-3">
+                  <label class="form-label d-block">Sexe</label>
+                  <div class="form-check form-check-inline">
+                    <input
+                      type="radio"
+                      id="sexeH"
+                      name="sexe"
+                      class="form-check-input"
+                      value="H"
+                      required
+                      autocomplete="off"
+                    />
+                    <label class="form-check-label" for="sexeH">Masculin</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      type="radio"
+                      id="sexeF"
+                      name="sexe"
+                      class="form-check-input"
+                      value="F"
+                      required
+                      autocomplete="off"
+                    />
+                    <label class="form-check-label" for="sexeF">Féminin</label>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3">
+                  <label for="dateNaissance" class="form-label">
+                    Date de naissance
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="dateNaissance"
+                      name="dateNaissance"
+                      class="form-control"
+                      placeholder="jj/mm/aaaa"
+                      required
+                      autocomplete="off"
+                      data-format="date"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="dateNaissance"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3">
+                  <label for="taille" class="form-label">Taille (cm)</label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="taille"
+                      name="taille"
+                      class="form-control"
+                      required
+                      autocomplete="off"
+                      data-format="integer"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="taille"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xxl-3">
+                  <label for="poids" class="form-label">Poids (kg)</label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="poids"
+                      name="poids"
+                      class="form-control"
+                      required
+                      autocomplete="off"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="poids"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div id="blocSouhaitPertePoids" class="row mt-2 d-none">
+                <div class="col-12 col-md-6 col-xxl-3">
+                  <label class="form-label d-block">
+                    Souhaitez-vous perdre du poids ?
+                  </label>
+                  <div class="form-check form-check-inline">
+                    <input
+                      type="radio"
+                      id="souhaitPertePoidsOui"
+                      name="souhaitPertePoids"
+                      class="form-check-input"
+                      value="oui"
+                      autocomplete="off"
+                    />
+                    <label class="form-check-label" for="souhaitPertePoidsOui">
+                      Oui
+                    </label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input
+                      type="radio"
+                      id="souhaitPertePoidsNon"
+                      name="souhaitPertePoids"
+                      class="form-check-input"
+                      value="non"
+                      autocomplete="off"
+                    />
+                    <label class="form-check-label" for="souhaitPertePoidsNon">
+                      Non
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <fieldset id="blocActivites" class="border p-3 rounded mb-3 d-none">
+              <legend class="w-auto">Activités (heures par jour)</legend>
+              <div class="row g-3">
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="sommeil" class="form-label">
+                    Sommeil, sieste
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="sommeil"
+                      name="sommeil"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="sommeil"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="repos" class="form-label">
+                    Repos (lecture, TV)
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="repos"
+                      name="repos"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="repos"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="assisCalme" class="form-label">
+                    Activité assise calme
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="assisCalme"
+                      name="assisCalme"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="assisCalme"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="assisActif" class="form-label">
+                    Travail de bureau actif
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="assisActif"
+                      name="assisActif"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="assisActif"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="deboutCalme" class="form-label">
+                    Activité debout calme
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="deboutCalme"
+                      name="deboutCalme"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="deboutCalme"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="menageLeger" class="form-label">
+                    Ménage léger
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="menageLeger"
+                      name="menageLeger"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="menageLeger"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="promenade" class="form-label"> Promenade </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="promenade"
+                      name="promenade"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="promenade"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="menageSoutenu" class="form-label">
+                    Ménage soutenu
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="menageSoutenu"
+                      name="menageSoutenu"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="menageSoutenu"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="marcheAlerte" class="form-label">
+                    Marche alerte
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="marcheAlerte"
+                      name="marcheAlerte"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="marcheAlerte"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="sport" class="form-label">Sport loisir</label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="sport"
+                      name="sport"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="sport"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="sportSoutenu" class="form-label">
+                    Sport soutenu
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="sportSoutenu"
+                      name="sportSoutenu"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="sportSoutenu"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col-12 col-md-6 col-xl-4 col-xxl-3">
+                  <label for="sportIntense" class="form-label">
+                    Sport intense
+                  </label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      id="sportIntense"
+                      name="sportIntense"
+                      class="form-control"
+                      data-format="float"
+                    />
+                    <button
+                      type="button"
+                      class="btn btn-outline-danger clear-btn"
+                      data-target="sportIntense"
+                      tabindex="-1"
+                    >
+                      <i class="bi bi-x-circle-fill"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </fieldset>
+            <div class="col-12 mb-3 d-flex">
+              <button type="submit" class="btn btn-primary">Calculer</button>
+            </div>
+          </form>
+          <div id="result" class="d-none mt-4">
+            <h2 class="mb-2">Résultats</h2>
+            <div id="blocProfil" class="p-3 border rounded bg-light mb-3">
+              <h3 class="mb-3">Profil</h3>
+              <div class="mb-2" id="userInfo"></div>
+              <div class="mb-2">
+                Indice de masse corporelle :
+                <span id="imc"></span>
+              </div>
+              <div class="mb-2">
+                IMC
+                <span id="imcInterpretation"></span>
+              </div>
+              <div class="my-3 d-flex gap-3">
+                <button type="button" id="editData" class="btn btn-primary">
+                  Modifier
+                </button>
+                <button type="button" id="resetData" class="btn btn-warning">
+                  Réinitialiser
+                </button>
+              </div>
+            </div>
+            <div
+              id="blocDepensesEnergetiques"
+              class="p-3 border rounded bg-light mb-3 d-none"
+            >
+              <h3 class="mb-3">Dépenses énergétiques</h3>
+              <div class="mb-2">
+                <strong>Métabolisme de base :</strong>
+                <span id="mbResult"></span>
+              </div>
+              <div class="mb-2">
+                <strong>Dépense énergétique :</strong>
+                <span id="totalResult"></span>
+              </div>
+              <div class="row mt-3">
+                <h5>Détail par activité</h5>
+                <div class="row">
+                  <div class="col-12 col-md-10 col-lg-8">
+                    <table
+                      class="table table-sm table-striped"
+                      id="activityBreakdown"
+                    >
+                      <thead>
+                        <tr>
+                          <th style="vertical-align: middle">Activité</th>
+                          <th
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            Durée (h)
+                          </th>
+                          <th
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            kcal/h
+                          </th>
+                          <th
+                            style="text-align: center; vertical-align: middle"
+                          >
+                            kcal/j
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody></tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="blocRecommandationsApportsJournaliers"
+              class="mb-3 p-3 border rounded bg-light"
+            >
+              <h3 class="mb-3">Apports journaliers recommandés</h3>
+              <div class="mb-2">
+                <strong>Énergie :</strong>
+                <span id="caloriesResult"></span>
+              </div>
+              <div class="mb-2">
+                <strong>Protéines :</strong>
+                <span id="proteinesResult"></span>
+              </div>
+              <div class="mb-0">
+                <strong>Lipides :</strong>
+                <span id="lipidesResult"></span>, dont :
+              </div>
+              <div id="divAgsResult" class="mb-0 mx-3">
+                - acides gras saturés :
+                <span id="agsResult"></span>
+              </div>
+              <div id="divAgmiResult" class="mb-0 mx-3">
+                - acides gras monoinsaturés (acide oléique) :
+                <span id="agmiResult"></span>
+              </div>
+              <div class="mb-0 mx-3">
+                - acides gras polyinsaturés oméga 6 :
+                <span id="omega6Result"></span>
+              </div>
+              <div class="mb-2 mx-3">
+                - acides gras polyinsaturés oméga 3 :
+                <span id="omega3Result"></span>
+              </div>
+              <div id="divGlucidesResult">
+                <strong>Glucides :</strong>
+                <span id="glucidesResult"></span>
+              </div>
+              <div id="divSucresResult" class="mb-0 mx-3">
+                - dont <strong>maximum</strong>
+                <span id="sucresResult"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="js/constants.js"></script>
+    <script src="js/utils/js-utils.js"></script>
+    <script src="js/ui/clear-buttons.js"></script>
+    <script src="js/ui/font-toggle.js"></script>
+    <script src="js/ui/scroll-to-top-page.js"></script>
+    <script src="js/formatter/number-formatter.js"></script>
+    <script src="js/formatter/date-formatter.js"></script>
+    <script src="js/core/seuils-imc-enfants.js"></script>
+    <script src="js/core/calculations.js"></script>
+    <script src="js/ui/display-results.js"></script>
+    <script src="js/form/form-submit.js"></script>
+    <script src="js/ui/user-actions.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

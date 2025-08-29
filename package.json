@@ -1,0 +1,19 @@
+{
+  "name": "nutricalc",
+  "version": "1.0.0",
+  "description": "Logiciel simple et gratuit de calculs d'apports nutritionnels recommandés",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "author": "Alain PICKEL <alain.pickel@orange.fr>",
+  "main": "index.html",
+  "scripts": {
+    "format": "prettier --write index.html css/style.css js/* scripts/update-libs.js",
+    "update:libs": "node scripts/update-libs.js"
+  },
+  "dependencies": {
+    "bootstrap": "^5.3.7",
+    "bootstrap-icons": "^1.13.1"
+  },
+  "devDependencies": {
+    "prettier": "^3.6.2"
+  }
+}
