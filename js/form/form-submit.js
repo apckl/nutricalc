@@ -147,8 +147,8 @@ nutriCalc.formSubmit = {
     const form = event.target;
     const data = this.getData(form);
     nutriCalc.calculations.main(data);
-    this.saveDataToLocalStorage(data);
-    if (!this.validateData(data)) {
+    nutriCalc.formSubmit.saveDataToLocalStorage(data);
+    if (!nutriCalc.formSubmit.validateData(data)) {
       nutriCalc.scrollToPageTop();
     } else {
       nutriCalc.displayResults.render(data);

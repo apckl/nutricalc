@@ -6,4 +6,5 @@ document.addEventListener('DOMContentLoaded', function () {
   nutriCalc.numberFormatter.init();
   nutriCalc.dateFormatter.init();
   nutriCalc.userActions.init();
+  nutriCalc.foodLogs.init();
 });

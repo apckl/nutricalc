@@ -4,6 +4,20 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Calculateur nutritionnel</title>
+    <link
+      rel="icon"
+      type="image/png"
+      href="./public/favicon-96x96.png"
+      sizes="96x96"
+    />
+    <link rel="icon" type="image/svg+xml" href="./public/favicon.svg" />
+    <link rel="shortcut icon" href="./public/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="./public/apple-touch-icon.png"
+    />
+    <link rel="manifest" href="./public/site.webmanifest" />
     <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" />
     <link rel="stylesheet" href="libs/bootstrap-icons/bootstrap-icons.css" />
     <link rel="stylesheet" href="css/style.css" />
@@ -429,7 +443,7 @@
                 </div>
               </div>
             </fieldset>
-            <div class="col-12 mb-3 d-flex">
+            <div class="col-12 mb-5 d-flex">
               <button type="submit" class="btn btn-primary">Calculer</button>
             </div>
           </form>
@@ -469,37 +483,37 @@
                 <span id="totalResult"></span>
               </div>
               <div class="row mt-3">
-                <h5>Détail par activité</h5>
+                <h5>Détail des activités</h5>
+                <!-- Vue desktop de la liste des activités -->
                 <div class="row">
-                  <div class="col-12 col-md-10 col-lg-8">
-                    <table
-                      class="table table-sm table-striped"
-                      id="activityBreakdown"
-                    >
-                      <thead>
-                        <tr>
-                          <th style="vertical-align: middle">Activité</th>
-                          <th
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            Durée (h)
-                          </th>
-                          <th
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            kcal/h
-                          </th>
-                          <th
-                            style="text-align: center; vertical-align: middle"
-                          >
-                            kcal/j
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
+                  <div class="col-12 col-lg-10 col-xl-8">
+                    <div class="table-responsive d-none d-md-block">
+                      <table
+                        class="table table-sm table-striped"
+                        id="activityBreakdown"
+                      >
+                        <thead>
+                          <tr>
+                            <th class="align-middle text-start">Activité</th>
+                            <th class="align-middle text-center">Durée (h)</th>
+                            <th class="align-middle text-center">
+                              Dépense par heure (kcal)
+                            </th>
+                            <th class="align-middle text-center">
+                              Dépense par jour (kcal)
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody></tbody>
+                      </table>
+                    </div>
                   </div>
                 </div>
+                <!-- Vue mobile de la liste des activités -->
+                <div
+                  class="accordion d-block d-md-none"
+                  id="activityAccordion"
+                ></div>
               </div>
             </div>
             <div
@@ -544,10 +558,95 @@
                 <span id="sucresResult"></span>
               </div>
             </div>
+            <div class="mt-3 mb-5 d-flex gap-3">
+              <button type="button" id="alimentsButton" class="btn btn-primary">
+                <i class="bi bi-fork-knife me-1"></i> Enregistrer mes aliments
+              </button>
+            </div>
+          </div>
+          <div id="aliments" class="d-none mt-4">
+            <h2 class="mb-2">Mes aliments du jour</h2>
+            <form id="foodForm" class="row g-3 mb-4">
+              <div class="col-12 col-md-6">
+                <label for="foodName" class="form-label">Aliment</label>
+                <input
+                  type="text"
+                  id="foodName"
+                  class="form-control"
+                  list="foodList"
+                  autocomplete="off"
+                  required
+                />
+                <datalist id="foodList"></datalist>
+              </div>
+              <div class="col-8 col-md-4">
+                <label for="foodUnit" class="form-label">Unité</label>
+                <select id="foodUnit" class="form-select" disabled>
+                  <option value="" disabled selected>
+                    — choisir une unité —
+                  </option>
+                </select>
+              </div>
+              <div class="col-4 col-md-2">
+                <label for="foodQty" class="form-label">Quantité</label>
+                <input
+                  type="number"
+                  id="foodQty"
+                  class="form-control"
+                  required
+                />
+              </div>
+              <div class="col-12">
+                <button
+                  id="addFoodButton"
+                  type="submit"
+                  class="btn btn-primary"
+                  disabled
+                >
+                  Ajouter
+                </button>
+              </div>
+            </form>
+            <div class="d-none" id="blocFoodSummary">
+              <!-- Vue desktop de la liste des aliments -->
+              <div class="table-responsive d-none d-md-block">
+                <table class="table table-striped align-middle" id="foodTable">
+                  <thead class="table-light">
+                    <tr>
+                      <th>Aliment</th>
+                      <th>Quantité</th>
+                      <th class="text-center">Énergie (kcal)</th>
+                      <th class="text-center">Protéines (g)</th>
+                      <th class="text-center">Lipides (g)</th>
+                      <th class="text-center">Glucides (g)</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody></tbody>
+                </table>
+              </div>
+              <!-- Vue mobile de la liste des aliments -->
+              <div class="accordion d-block d-md-none" id="foodAccordion"></div>
+              <div id="apportsNutritionnels" class="mt-4">
+                <h2>Apports nutritionnels</h2>
+                <div id="foodTotals" class="d-flex flex-column gap-3"></div>
+              </div>
+            </div>
+            <div class="mt-3 mb-5 d-flex gap-3">
+              <button
+                type="button"
+                id="backToResultButton"
+                class="btn btn-primary"
+              >
+                <i class="bi bi-arrow-left-circle me-1"></i>
+                Revenir aux résultats
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
+    <script src="libs/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="js/constants.js"></script>
     <script src="js/utils/js-utils.js"></script>
     <script src="js/ui/clear-buttons.js"></script>
@@ -555,8 +654,10 @@
     <script src="js/ui/scroll-to-top-page.js"></script>
     <script src="js/formatter/number-formatter.js"></script>
     <script src="js/formatter/date-formatter.js"></script>
+    <script src="js/core/food-composition-table.js"></script>
     <script src="js/core/seuils-imc-enfants.js"></script>
     <script src="js/core/calculations.js"></script>
+    <script src="js/core/food-logs.js"></script>
     <script src="js/ui/display-results.js"></script>
     <script src="js/form/form-submit.js"></script>
     <script src="js/ui/user-actions.js"></script>

@@ -20,6 +20,7 @@ nutriCalc.numberFormatter = {
       } else {
         formated = integerPart;
       }
+
       return /^0+$/.test(formated) ? '' : formated;
     }
 

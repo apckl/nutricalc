@@ -58,3 +58,7 @@ body.use-arial {
   border-color: lightgray;
   border-radius: 50%;
 }
+
+.bg-purple {
+  background-color: #6f42c1;
+}

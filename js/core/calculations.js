@@ -30,8 +30,10 @@ nutriCalc.calculations = {
         data[AJR_CALORIES] = data[DEPENSE_TOTALE];
       } else {
         const pertePoidsMensuelle = 0.05 * data[POIDS];
-        const deficitCaloriqueJournalier =
-          Math.min(1000, (8000 * pertePoidsMensuelle) / (365.25 / 12));
+        const deficitCaloriqueJournalier = Math.min(
+          1000,
+          (8000 * pertePoidsMensuelle) / (365.25 / 12)
+        );
         data[AJR_CALORIES] = Math.round(
           data[DEPENSE_TOTALE] - deficitCaloriqueJournalier
         );
@@ -161,27 +163,29 @@ nutriCalc.calculations = {
   },
   calculerMacroNutriments(data) {
     const {
-      AGE,
-      AGE_MOIS,
-      AGMI,
-      AGS,
-      AJR_CALORIES,
+      ACIDES_GRAS_MONOINSATURES,
+      ACIDES_GRAS_SATURES,
       GLUCIDES,
       LIPIDES,
+      OMEGA3,
+      OMEGA6,
+      PROTEINES,
+      SUCRES,
+    } = nutriCalc.constants.NUTRIMENTS;
+    const {
+      AGE,
+      AGE_MOIS,
+      AJR_CALORIES,
       MAX,
       MAX_PROTEINES,
       MIN,
       MIN_PROTEINES,
-      OMEGA3,
-      OMEGA6,
       OPTION_LIPIDES,
       OPTION_PROTEINES,
       PROPORTION_GLUCIDES,
       PROPORTION_LIPIDES,
       PROPORTION_PROTEINES,
-      PROTEINES,
       PROTEINES_CIBLE,
-      SUCRES,
     } = nutriCalc.constants;
     this.calculerProteines(data);
     const age = data[AGE];
@@ -224,8 +228,8 @@ nutriCalc.calculations = {
     const caloriesGlucides = calories - caloriesProteines - caloriesLipides;
     data[GLUCIDES] = Math.floor(caloriesGlucides / 4);
     data[LIPIDES] = Math.floor(caloriesLipides / 9);
-    data[AGS] = Math.floor(caloriesAgs / 9);
-    data[AGMI] = Math.ceil(caloriesAgmi / 9);
+    data[ACIDES_GRAS_SATURES] = Math.floor(caloriesAgs / 9);
+    data[ACIDES_GRAS_MONOINSATURES] = Math.ceil(caloriesAgmi / 9);
     data[OMEGA3] = Math.ceil((10 * caloriesOmega3) / 9) / 10;
     data[OMEGA6] = Math.floor((10 * caloriesOmega6) / 9) / 10;
     data[PROTEINES] = proteines;

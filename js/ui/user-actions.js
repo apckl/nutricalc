@@ -52,20 +52,49 @@ nutriCalc.userActions = {
     );
     const editButton = document.getElementById('editData');
     const result = document.getElementById('result');
+    const aliments = document.getElementById('aliments');
     if (editButton) {
       editButton.addEventListener('click', function () {
         result.classList.add('d-none');
         form.classList.remove('d-none');
+        aliments.classList.add('d-none');
         nutriCalc.scrollToPageTop();
       });
     }
     const resetButton = document.getElementById('resetData');
+    const blocActivites = document.getElementById('blocActivites');
+    const blocSouhaitPertePoids = document.getElementById(
+      'blocSouhaitPertePoids'
+    );
     if (resetButton) {
       resetButton.addEventListener('click', function () {
         form.reset();
         result.classList.add('d-none');
         form.classList.remove('d-none');
+        aliments.classList.add('d-none');
+        blocActivites.classList.add('d-none');
+        blocSouhaitPertePoids.classList.add('d-none');
         localStorage.removeItem(nutriCalc.constants.NUTRICALC_DATA);
+        nutriCalc.foodLogs.reset();
+        nutriCalc.scrollToPageTop();
+      });
+    }
+    const alimentsButton = document.getElementById('alimentsButton');
+    if (alimentsButton) {
+      alimentsButton.addEventListener('click', function () {
+        result.classList.add('d-none');
+        form.classList.add('d-none');
+        aliments.classList.remove('d-none');
+        nutriCalc.foodLogs.init();
+        nutriCalc.scrollToPageTop();
+      });
+    }
+    const backToResultButton = document.getElementById('backToResultButton');
+    if (backToResultButton) {
+      backToResultButton.addEventListener('click', function () {
+        result.classList.remove('d-none');
+        form.classList.add('d-none');
+        aliments.classList.add('d-none');
         nutriCalc.scrollToPageTop();
       });
     }

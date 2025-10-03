@@ -3,29 +3,31 @@ window.nutriCalc = window.nutriCalc || {};
 nutriCalc.displayResults = {
   render(data) {
     const {
-      AGE,
-      AGS,
-      AGMI,
+      ACIDES_GRAS_SATURES,
+      ACIDES_GRAS_MONOINSATURES,
       OMEGA3,
       OMEGA6,
+      GLUCIDES,
+      LIPIDES,
+      PROTEINES,
+      SUCRES,
+    } = nutriCalc.constants.NUTRIMENTS;
+    const {
+      AGE,
       AJR_CALORIES,
       DEPENSE_TOTALE,
       ELEVE,
       EXTREMEMENT_ELEVE,
-      GLUCIDES,
       IMC,
       INTERPRETATION_IMC,
-      LIPIDES,
       METABOLISME_BASE,
       NORMAL,
       POIDS,
       PROPORTION_GLUCIDES,
       PROPORTION_LIPIDES,
       PROPORTION_PROTEINES,
-      PROTEINES,
       PROFIL,
       SOUHAIT_PERTE_POIDS,
-      SUCRES,
       TRES_ELEVE,
     } = nutriCalc.constants;
     document.getElementById('userInfo').textContent = data[PROFIL];
@@ -70,11 +72,73 @@ nutriCalc.displayResults = {
             const tr = document.createElement('tr');
             tr.innerHTML = `
           <td>${label}</td>
-          <td style="text-align: center; vertical-align: middle;">${hours.toLocaleString('fr-FR')}</td>
-          <td style="text-align: center; vertical-align: middle;">${kcalPerHour}</td>
-          <td style="text-align: center; vertical-align: middle;">${kcalTotal}</td>
+          <td class="align-middle text-center">
+            ${hours.toLocaleString('fr-FR')}
+          </td>
+          <td class="align-middle text-center">
+            ${kcalPerHour}
+          </td>
+          <td class="align-middle text-center">
+            ${kcalTotal}
+          </td>
         `;
             tbody.appendChild(tr);
+          }
+        }
+      );
+      const accordion = document.getElementById('activityAccordion');
+      accordion.innerHTML = '';
+      Object.keys(nutriCalc.constants.COEFFICIENTS_ACTIVITES).forEach(
+        (activity, index) => {
+          const hours = parseFloat(data[activity]) || 0;
+          if (hours > 0) {
+            const label =
+              nutriCalc.constants.LABELS_ACTIVITES_ADULTES[activity] ||
+              activity;
+            const kcalPerHour = Math.round(
+              nutriCalc.constants.COEFFICIENTS_ACTIVITES[activity] * data[POIDS]
+            );
+            const kcalTotal = Math.round(kcalPerHour * hours);
+            const collapseId = `collapseActivity${index}`;
+            const headerId = `headingActivity${index}`;
+            const item = document.createElement('div');
+            item.className = 'accordion-item';
+            item.innerHTML = `
+              <h2 class="accordion-header" id="${headerId}">
+                <button 
+                  class="accordion-button collapsed"
+                  type="button"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#${collapseId}"
+                  aria-expanded="false"
+                  aria-controls="${collapseId}"
+                >
+                  ${label} : ${hours.toLocaleString('fr-FR')} h
+                </button>
+              </h2>
+              <div
+                id="${collapseId}"
+                class="accordion-collapse collapse"
+                aria-labelledby="${headerId}"
+                data-bs-parent="#activityAccordion"
+              >
+                <div class="accordion-body small">
+                  <div>
+                    <strong>
+                      Dépense par heure :
+                    </strong>
+                    ${kcalPerHour} kcal
+                  </div>
+                  <div>
+                    <strong>
+                      Dépense par jour :
+                    </strong>
+                    ${kcalTotal} kcal
+                  </div>
+                </div>
+              </div>
+            `;
+            accordion.appendChild(item);
           }
         }
       );
@@ -114,8 +178,10 @@ nutriCalc.displayResults = {
     } else {
       document.getElementById('divAgsResult').classList.remove('d-none');
       document.getElementById('divAgmiResult').classList.remove('d-none');
-      document.getElementById('agsResult').textContent = data[AGS] + ' g';
-      document.getElementById('agmiResult').textContent = data[AGMI] + ' g';
+      document.getElementById('agsResult').textContent =
+        data[ACIDES_GRAS_SATURES] + ' g';
+      document.getElementById('agmiResult').textContent =
+        data[ACIDES_GRAS_MONOINSATURES] + ' g';
     }
     document.getElementById('omega6Result').textContent =
       data[OMEGA6].toLocaleString('fr-FR') + ' g';
@@ -133,7 +199,8 @@ nutriCalc.displayResults = {
       document.getElementById('divGlucidesResult').classList.remove('mb-2');
       document.getElementById('divSucresResult').classList.remove('d-none');
       document.getElementById('sucresResult').textContent =
-        data[SUCRES] + ' g de sucres (fructose, glucose, saccharose)';
+        data[SUCRES] +
+        ' g de sucres (fructose, glucose, maltose et saccharose)';
     }
     document.getElementById('nutritionForm').classList.add('d-none');
     document.getElementById('result').classList.remove('d-none');
