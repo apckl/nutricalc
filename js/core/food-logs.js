@@ -25,8 +25,10 @@ nutriCalc.foodLogs = {
       return;
     }
     let poids = 0;
-    if (unit === 'grammes') {
+    if (unit === nutriCalc.constants.GRAMMES) {
       poids = qty;
+    } else if (unit === nutriCalc.constants.MILLILITRES) {
+      poids = qty * food.densite;
     } else if (food.portions) {
       const portion = food.portions.find((p) => p.label === unit);
       if (!portion) return;
@@ -46,10 +48,17 @@ nutriCalc.foodLogs = {
     const sucresHorsLactose = (ref[SUCRES_HORS_LACTOSE] * poids) / 100;
     const lactose = (ref[LACTOSE] * poids) / 100;
     const calories = proteines * 4 + glucides * 4 + lipides * 9;
+    const qtyDisplay = nutriCalc.quantityFormatter.formatQuantity(
+      qty,
+      unit,
+      poids
+    );
     const item = {
       id: Date.now(),
       name,
       qty,
+      qtyDisplay,
+      poids,
       unit,
       [CALORIES]: calories,
       [PROTEINES]: proteines,
@@ -301,7 +310,7 @@ nutriCalc.foodLogs = {
       const tr = document.createElement('tr');
       tr.innerHTML = `
           <td>${item.name}</td>
-          <td>${item.qty} ${item.unit}</td>
+          <td>${item.qtyDisplay}</td>
           <td class="text-center">
             ${Math.round(item[CALORIES])}
           </td>
@@ -340,7 +349,7 @@ nutriCalc.foodLogs = {
               data-bs-toggle="collapse"
               data-bs-target="#${collapseId}"
             >
-              ${item.name} – ${item.qty} ${item.unit}
+              ${item.name} – ${item.qtyDisplay}
             </button>
           </h2>
           <div id="${collapseId}" class="accordion-collapse collapse"
@@ -404,16 +413,23 @@ nutriCalc.foodLogs = {
       unitSelect.disabled = true;
       document.getElementById('addFoodButton').disabled = true;
       if (food) {
+        const { GRAMMES, MILLILITRES } = nutriCalc.constants;
         unitSelect.dataset.ration = food.ration ? food.ration : '';
         unitSelect.disabled = false;
         if (!food.portions || food.portions.length === 0) {
           unitSelect.innerHTML = '';
-          unitSelect.appendChild(new Option('grammes', 'grammes'));
-          unitSelect.value = 'grammes';
+          unitSelect.appendChild(new Option(GRAMMES, GRAMMES));
+          if (food.liquide) {
+            unitSelect.appendChild(new Option(MILLILITRES, MILLILITRES));
+          }
+          unitSelect.value = GRAMMES;
           qtyEl.value = food.ration ? food.ration : 100;
           document.getElementById('addFoodButton').disabled = false;
         } else {
-          unitSelect.appendChild(new Option('grammes', 'grammes'));
+          unitSelect.appendChild(new Option(GRAMMES, GRAMMES));
+          if (food.liquide) {
+            unitSelect.appendChild(new Option(MILLILITRES, MILLILITRES));
+          }
           food.portions.forEach((p) => {
             unitSelect.appendChild(new Option(p.label, p.label));
           });
@@ -423,9 +439,11 @@ nutriCalc.foodLogs = {
     unitSelect.addEventListener('change', () => {
       const qtyEl = document.getElementById('foodQty');
       if (unitSelect.value) {
-        if (unitSelect.value === 'grammes') {
+        if (unitSelect.value === nutriCalc.constants.GRAMMES) {
           const ration = unitSelect.dataset.ration;
           qtyEl.value = ration ? ration : 100;
+        } else if (unitSelect.value === nutriCalc.constants.MILLILITRES) {
+          qtyEl.value = 100;
         } else {
           qtyEl.value = 1;
         }
